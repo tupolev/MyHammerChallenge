@@ -1,0 +1,6 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+job_request:
+    type: rest
+    resource: App\Controller\JobRequestController
