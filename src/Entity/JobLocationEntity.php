@@ -5,9 +5,10 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\LocationRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\JobLocationRepository")
+ * @ORM\Table(name="job_locations")
  */
-class Location
+class JobLocationEntity
 {
     /**
      * @ORM\Id()

@@ -36,9 +36,9 @@ services:
         class: App\Model\JobRequestModel
         arguments:
             - "App\\Repository\\JobRequestRepository"
-            - "App\\Repository\\UserRepository"
+            - "App\\Repository\\JobUserRepository"
             - "App\\Repository\\JobCategoryRepository"
-            - "App\\Repository\\LocationRepository"
+            - "App\\Repository\\JobLocationRepository"
 
     app.service.job_request:
         class: App\Service\JobRequestService
@@ -50,4 +50,5 @@ services:
         arguments:
             - "@app.service.job_request"
             - "@app.factory.job_request"
+            - "@logger"
 

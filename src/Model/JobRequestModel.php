@@ -4,12 +4,12 @@ namespace App\Model;
 
 
 use App\DTO\JobRequestDTO;
-use App\Entity\JobRequest;
+use App\Entity\JobRequestEntity;
 use App\Exception\JobRequestPersistException;
 use App\Repository\JobCategoryRepositoryInterface;
 use App\Repository\JobRequestRepositoryInterface;
-use App\Repository\LocationRepositoryInterface;
-use App\Repository\UserRepositoryInterface;
+use App\Repository\JobLocationRepositoryInterface;
+use App\Repository\JobUserRepositoryInterface;
 use Doctrine\ORM\ORMException;
 
 class JobRequestModel implements JobRequestModelInterface
@@ -17,32 +17,32 @@ class JobRequestModel implements JobRequestModelInterface
     /** @var JobRequestRepositoryInterface */
     private $jobRequestRepository = null;
 
-    /** @var UserRepositoryInterface */
-    private $userRepository = null;
+    /** @var JobUserRepositoryInterface */
+    private $jobUserRepository = null;
 
     /** @var JobCategoryRepositoryInterface */
     private $jobCategoryRepository = null;
 
-    /** @var LocationRepositoryInterface */
-    private $locationRepository = null;
+    /** @var JobLocationRepositoryInterface */
+    private $jobLocationRepository = null;
 
     /**
      * @param JobRequestRepositoryInterface $jobRequestRepository
-     * @param UserRepositoryInterface $userRepository
+     * @param JobUserRepositoryInterface $jobUserRepository
      * @param JobCategoryRepositoryInterface $jobCategoryRepository
-     * @param LocationRepositoryInterface $locationRepository
+     * @param JobLocationRepositoryInterface $jobLocationRepository
      */
     public function __construct(
         JobRequestRepositoryInterface $jobRequestRepository,
-        UserRepositoryInterface $userRepository,
+        JobUserRepositoryInterface $jobUserRepository,
         JobCategoryRepositoryInterface $jobCategoryRepository,
-        LocationRepositoryInterface $locationRepository
+        JobLocationRepositoryInterface $jobLocationRepository
     )
     {
         $this->jobRequestRepository = $jobRequestRepository;
-        $this->userRepository = $userRepository;
+        $this->jobUserRepository = $jobUserRepository;
         $this->jobCategoryRepository = $jobCategoryRepository;
-        $this->locationRepository = $locationRepository;
+        $this->jobLocationRepository = $jobLocationRepository;
     }
 
     /**
@@ -54,10 +54,10 @@ class JobRequestModel implements JobRequestModelInterface
     public function createNewJobRequest(JobRequestDTO $jobRequestDTO, array $jobRequestCreationErrors)
     {
         try {
-            $jobRequestEntity = new JobRequest();
-            $jobRequestEntity->setUser($this->userRepository->find($jobRequestDTO->getUserId()));
+            $jobRequestEntity = new JobRequestEntity();
+            $jobRequestEntity->setUser($this->jobUserRepository->find($jobRequestDTO->getUserId()));
             $jobRequestEntity->setCategory($this->jobCategoryRepository->find($jobRequestDTO->getCategoryId()));
-            $jobRequestEntity->setLocation($this->locationRepository->find($jobRequestDTO->getLocationId()));
+            $jobRequestEntity->setLocation($this->jobLocationRepository->find($jobRequestDTO->getLocationId()));
             $jobRequestEntity->setTitle($jobRequestDTO->getTitle());
             $jobRequestEntity->setDescription($jobRequestDTO->getDescription());
             $jobRequestEntity->setRequestedDateTime($jobRequestDTO->getRequestedDateTime());

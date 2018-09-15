@@ -7,9 +7,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\JobUserRepository")
+ * @ORM\Table(name="job_users")
  */
-class User
+class JobUserEntity
 {
     /**
      * @ORM\Id()
@@ -23,7 +24,7 @@ class User
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\JobRequest", mappedBy="userId")
+     * @ORM\OneToMany(targetEntity="JobRequestEntity", mappedBy="userId")
      */
     private $jobRequests;
 
@@ -57,14 +58,14 @@ class User
     }
 
     /**
-     * @return Collection|JobRequest[]
+     * @return Collection|JobRequestEntity[]
      */
     public function getJobRequests(): Collection
     {
         return $this->jobRequests;
     }
 
-    public function addJobRequest(JobRequest $jobRequest): self
+    public function addJobRequest(JobRequestEntity $jobRequest): self
     {
         if (!$this->jobRequests->contains($jobRequest)) {
             $this->jobRequests[] = $jobRequest;
@@ -74,7 +75,7 @@ class User
         return $this;
     }
 
-    public function removeJobRequest(JobRequest $jobRequest): self
+    public function removeJobRequest(JobRequestEntity $jobRequest): self
     {
         if ($this->jobRequests->contains($jobRequest)) {
             $this->jobRequests->removeElement($jobRequest);

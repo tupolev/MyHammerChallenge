@@ -6,8 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\JobRequestRepository")
+ * @ORM\Table(name="job_requests")
  */
-class JobRequest
+class JobRequestEntity
 {
     /**
      * @ORM\Id()
@@ -17,19 +18,19 @@ class JobRequest
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\JobCategory")
+     * @ORM\ManyToOne(targetEntity="JobCategoryEntity")
      * @ORM\JoinColumn(nullable=false)
      */
     private $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Location")
+     * @ORM\ManyToOne(targetEntity="JobLocationEntity")
      * @ORM\JoinColumn(nullable=false)
      */
     private $location;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="jobRequests")
+     * @ORM\ManyToOne(targetEntity="JobUserEntity", inversedBy="jobRequests")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
@@ -64,36 +65,36 @@ class JobRequest
         return $this->id;
     }
 
-    public function getCategory(): ?JobCategory
+    public function getCategory(): ?JobCategoryEntity
     {
         return $this->category;
     }
 
-    public function setCategory(?JobCategory $category): self
+    public function setCategory(?JobCategoryEntity $category): self
     {
         $this->category = $category;
 
         return $this;
     }
 
-    public function getLocation(): ?Location
+    public function getLocation(): ?JobLocationEntity
     {
         return $this->location;
     }
 
-    public function setLocation(?Location $location): self
+    public function setLocation(?JobLocationEntity $location): self
     {
         $this->location = $location;
 
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser(): ?JobUserEntity
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(?JobUserEntity $user): self
     {
         $this->user = $user;
 

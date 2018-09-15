@@ -2,9 +2,9 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\JobCategory;
-use App\Entity\Location;
-use App\Entity\User;
+use App\Entity\JobCategoryEntity;
+use App\Entity\JobLocationEntity;
+use App\Entity\JobUserEntity;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -25,7 +25,7 @@ class JobRequestFixtures extends Fixture
         ];
 
         foreach ($categories as $category) {
-            $jobCategory = new JobCategory();
+            $jobCategory = new JobCategoryEntity();
             $jobCategory->setId($category["id"]);
             $jobCategory->setName($category["name"]);
 
@@ -43,7 +43,7 @@ class JobRequestFixtures extends Fixture
         ];
 
         foreach ($locations as $location) {
-            $jobLocation = new Location();
+            $jobLocation = new JobLocationEntity();
             $jobLocation->setZipcode($location["zipcode"]);
             $jobLocation->setCity($location["city"]);
 
@@ -57,7 +57,7 @@ class JobRequestFixtures extends Fixture
         ];
 
         foreach ($users as $user) {
-            $jobUser = new User();
+            $jobUser = new JobUserEntity();
             $jobUser->setId($user["id"]);
             $jobUser->setName($user["name"]);
 

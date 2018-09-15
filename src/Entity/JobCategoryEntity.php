@@ -6,8 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\JobCategoryRepository")
+ * @ORM\Table(name="job_categories")
  */
-class JobCategory
+class JobCategoryEntity
 {
     /**
      * @ORM\Id()
