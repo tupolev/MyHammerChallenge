@@ -4,6 +4,7 @@ namespace App\Service;
 
 
 use App\DTO\JobRequestDTO;
+use App\Exception\JobRequestPersistException;
 use App\Model\JobRequestModelInterface;
 
 class JobRequestService implements JobRequestServiceInterface
@@ -19,7 +20,13 @@ class JobRequestService implements JobRequestServiceInterface
         $this->jobRequestModel = $jobRequestModel;
     }
 
-    public function createNewJobRequest(JobRequestDTO $jobRequestDTO, array $jobRequestCreationErrors): bool
+    /**
+     * @param JobRequestDTO $jobRequestDTO
+     * @param array $jobRequestCreationErrors
+     *
+     * @throws JobRequestPersistException
+     */
+    public function createNewJobRequest(JobRequestDTO $jobRequestDTO, array $jobRequestCreationErrors)
     {
         $this->jobRequestModel->createNewJobRequest($jobRequestDTO, $jobRequestCreationErrors);
     }

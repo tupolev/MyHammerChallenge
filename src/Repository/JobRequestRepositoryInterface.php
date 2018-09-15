@@ -6,5 +6,11 @@ use App\Entity\JobRequest;
 
 interface JobRequestRepositoryInterface
 {
-    public function addNew(JobRequest $jobRequest): bool;
+    /**
+     * @param JobRequest $jobRequest
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function addNew(JobRequest $jobRequest);
 }

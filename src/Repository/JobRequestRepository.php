@@ -22,11 +22,10 @@ class JobRequestRepository extends ServiceEntityRepository implements JobRequest
     /**
      * @param JobRequest $jobRequest
      *
-     * @return bool
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function addNew(JobRequest $jobRequest): bool
+    public function addNew(JobRequest $jobRequest)
     {
         $this->_em->persist($jobRequest);
         $this->_em->flush();

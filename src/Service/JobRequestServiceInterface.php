@@ -4,13 +4,14 @@ namespace App\Service;
 
 
 use App\DTO\JobRequestDTO;
+use App\Exception\JobRequestPersistException;
 
 interface JobRequestServiceInterface
 {
     /**
      * @param JobRequestDTO $jobRequestDTO
      * @param array $jobRequestCreationErrors
-     * @return bool
+     * @throws JobRequestPersistException
      */
-    public function createNewJobRequest(JobRequestDTO $jobRequestDTO, array $jobRequestCreationErrors): bool;
+    public function createNewJobRequest(JobRequestDTO $jobRequestDTO, array $jobRequestCreationErrors);
 }

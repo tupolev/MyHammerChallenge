@@ -29,25 +29,16 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    app.repository.job_request:
-        class: App\Repository\JobRequestRepository
-    app.repository.user:
-        class: App\Repository\UserRepository
-    app.repository.job_category:
-        class: App\Repository\JobCategoryRepository
-    app.repository.location:
-        class: App\Repository\LocationRepository
-
     app.factory.job_request:
         class: App\Factory\JobRequestFactory
 
     app.model.job_request:
         class: App\Model\JobRequestModel
         arguments:
-            - "@app.repository.job_request"
-            - "@app.repository.user"
-            - "@app.repository.job_category"
-            - "@app.repository.location"
+            - "App\\Repository\\JobRequestRepository"
+            - "App\\Repository\\UserRepository"
+            - "App\\Repository\\JobCategoryRepository"
+            - "App\\Repository\\LocationRepository"
 
     app.service.job_request:
         class: App\Service\JobRequestService

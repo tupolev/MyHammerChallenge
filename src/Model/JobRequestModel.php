@@ -5,10 +5,12 @@ namespace App\Model;
 
 use App\DTO\JobRequestDTO;
 use App\Entity\JobRequest;
+use App\Exception\JobRequestPersistException;
 use App\Repository\JobCategoryRepositoryInterface;
 use App\Repository\JobRequestRepositoryInterface;
 use App\Repository\LocationRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
+use Doctrine\ORM\ORMException;
 
 class JobRequestModel implements JobRequestModelInterface
 {
@@ -47,20 +49,24 @@ class JobRequestModel implements JobRequestModelInterface
      * @param JobRequestDTO $jobRequestDTO
      * @param array $jobRequestCreationErrors
      *
-     * @return bool
+     * @throws JobRequestPersistException
      */
-    public function createNewJobRequest(JobRequestDTO $jobRequestDTO, array $jobRequestCreationErrors): bool
+    public function createNewJobRequest(JobRequestDTO $jobRequestDTO, array $jobRequestCreationErrors)
     {
-        $jobRequestEntity = new JobRequest();
-        $jobRequestEntity->setUser($this->userRepository->find($jobRequestDTO->getUserId()));
-        $jobRequestEntity->setCategory($this->jobCategoryRepository->find($jobRequestDTO->getCategoryId()));
-        $jobRequestEntity->setLocation($this->locationRepository->find($jobRequestDTO->getLocationId()));
-        $jobRequestEntity->setTitle($jobRequestDTO->getTitle());
-        $jobRequestEntity->setDescription($jobRequestDTO->getDescription());
-        $jobRequestEntity->setDescription($jobRequestDTO->getDescription());
-        $jobRequestEntity->setCreatedAt(new \DateTime());
-        $jobRequestEntity->setUpdatedAt(new \DateTime());
+        try {
+            $jobRequestEntity = new JobRequest();
+            $jobRequestEntity->setUser($this->userRepository->find($jobRequestDTO->getUserId()));
+            $jobRequestEntity->setCategory($this->jobCategoryRepository->find($jobRequestDTO->getCategoryId()));
+            $jobRequestEntity->setLocation($this->locationRepository->find($jobRequestDTO->getLocationId()));
+            $jobRequestEntity->setTitle($jobRequestDTO->getTitle());
+            $jobRequestEntity->setDescription($jobRequestDTO->getDescription());
+            $jobRequestEntity->setRequestedDateTime($jobRequestDTO->getRequestedDateTime());
+            $jobRequestEntity->setCreatedAt(new \DateTime());
+            $jobRequestEntity->setUpdatedAt(new \DateTime());
 
-        return $this->jobRequestRepository->addNew($jobRequestEntity);
+            $this->jobRequestRepository->addNew($jobRequestEntity);
+        } catch (ORMException $ex) {
+            throw new JobRequestPersistException($ex);
+        }
     }
 }

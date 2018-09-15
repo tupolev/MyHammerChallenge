@@ -13,7 +13,6 @@ class User
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -36,6 +35,13 @@ class User
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getName(): ?string
@@ -62,7 +68,7 @@ class User
     {
         if (!$this->jobRequests->contains($jobRequest)) {
             $this->jobRequests[] = $jobRequest;
-            $jobRequest->setUserId($this);
+            $jobRequest->setUser($this);
         }
 
         return $this;
@@ -73,8 +79,8 @@ class User
         if ($this->jobRequests->contains($jobRequest)) {
             $this->jobRequests->removeElement($jobRequest);
             // set the owning side to null (unless already changed)
-            if ($jobRequest->getUserId() === $this) {
-                $jobRequest->setUserId(null);
+            if ($jobRequest->getUser() === $this) {
+                $jobRequest->setUser(null);
             }
         }
 
