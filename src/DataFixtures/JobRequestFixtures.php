@@ -34,16 +34,17 @@ class JobRequestFixtures extends Fixture
 
         /* Job locations fixtures */
         $locations = [
-            ["zipcode" => "10115", "city" => "Berlin"],
-            ["zipcode" => "32457", "city" => "Porta Westfalica"],
-            ["zipcode" => "01623", "city" => "Lommatzsch"],
-            ["zipcode" => "21521", "city" => "Hamburg"],
-            ["zipcode" => "06895", "city" => "Bülzig"],
-            ["zipcode" => "01612", "city" => "Diesbar-Seußlitz"],
+            ["id" => 1, "zipcode" => "10115", "city" => "Berlin"],
+            ["id" => 2, "zipcode" => "32457", "city" => "Porta Westfalica"],
+            ["id" => 3, "zipcode" => "01623", "city" => "Lommatzsch"],
+            ["id" => 4, "zipcode" => "21521", "city" => "Hamburg"],
+            ["id" => 5, "zipcode" => "06895", "city" => "Bülzig"],
+            ["id" => 6, "zipcode" => "01612", "city" => "Diesbar-Seußlitz"],
         ];
 
         foreach ($locations as $location) {
             $jobLocation = new JobLocationEntity();
+            $jobLocation->setId($location["id"]);
             $jobLocation->setZipcode($location["zipcode"]);
             $jobLocation->setCity($location["city"]);
 

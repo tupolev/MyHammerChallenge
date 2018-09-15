@@ -12,7 +12,6 @@ class JobLocationEntity
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -40,6 +39,13 @@ class JobLocationEntity
     public function setZipcode(string $zipcode): self
     {
         $this->zipcode = $zipcode;
+
+        return $this;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
 
         return $this;
     }

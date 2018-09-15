@@ -22,7 +22,7 @@ class JobRequestController extends FOSRestController
 {
     const HTTP_STATUS_UNPROCESSABLE_ENTITY = 422;
     const HTTP_STATUS_BAD_REQUEST = 410;
-    const HTTP_STATUS_OK = 200;
+    const HTTP_STATUS_CREATED = 201;
     const HTTP_STATUS_GENERAL_SERVER_ERROR = 500;
 
     /** @var JobRequestServiceInterface */
@@ -93,7 +93,7 @@ class JobRequestController extends FOSRestController
      */
     private function buildSuccessfulCreationResponse(): JsonResponse
     {
-        return $this->json(new ResponseDTO(ResponseDTO::STATUS_SUCCESS, "Success"));
+        return $this->json(new ResponseDTO(ResponseDTO::STATUS_SUCCESS, "Success"), self::HTTP_STATUS_CREATED);
     }
 
     /**
