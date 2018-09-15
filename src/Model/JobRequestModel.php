@@ -10,6 +10,7 @@ use App\Repository\JobCategoryRepositoryInterface;
 use App\Repository\JobRequestRepositoryInterface;
 use App\Repository\JobLocationRepositoryInterface;
 use App\Repository\JobUserRepositoryInterface;
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\ORMException;
 
 class JobRequestModel implements JobRequestModelInterface
@@ -65,7 +66,7 @@ class JobRequestModel implements JobRequestModelInterface
             $jobRequestEntity->setUpdatedAt(new \DateTime());
 
             $this->jobRequestRepository->addNew($jobRequestEntity);
-        } catch (ORMException $ex) {
+        } catch (ORMException|DBALException $ex) {
             throw new JobRequestPersistException($ex);
         }
     }

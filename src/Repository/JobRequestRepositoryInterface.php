@@ -9,6 +9,7 @@ interface JobRequestRepositoryInterface
     /**
      * @param JobRequestEntity $jobRequest
      *
+     * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */

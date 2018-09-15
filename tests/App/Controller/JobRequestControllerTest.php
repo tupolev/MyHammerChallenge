@@ -12,10 +12,19 @@ class JobRequestControllerTest extends WebTestCase
 {
     protected static $application;
 
-    private $payload = [
+    private $validPayload = [
         "categoryId" => "804040",
         "userId" =>  "524",
         "locationId" =>  "1",
+        "title" =>  "Umzug von Pankow nach Charlottenburg",
+        "description" =>  "Ich brauche Hilfe. Ich muss nach Charlottenburg umziehen aber habe kein Auto dafür.",
+        "requestedDateTime" =>  "2018-10-11T10:10:00Z",
+    ];
+
+    private $invalidPayload = [
+        "categoryId" => "804040",
+        "userId" =>  "524",
+        "locationId" =>  "999",
         "title" =>  "Umzug von Pankow nach Charlottenburg",
         "description" =>  "Ich brauche Hilfe. Ich muss nach Charlottenburg umziehen aber habe kein Auto dafür.",
         "requestedDateTime" =>  "2018-10-11T10:10:00Z",
@@ -31,13 +40,22 @@ class JobRequestControllerTest extends WebTestCase
     public function testCreate()
     {
         $client = static::createClient();
-        $client->request('POST', '/job_request', [], [], [], json_encode($this->payload));
 
+        //Create with valid payload
+        $client->request('POST', '/job_request', [], [], [], json_encode($this->validPayload));
         $this->assertEquals(JobRequestController::HTTP_STATUS_CREATED, $client->getResponse()->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
             $client->getResponse()->getContent(),
             '{"status":"success","message":"Success","fields":[]}'
         );
+
+        //create with wrong body
+        $client->request('POST', '/job_request', [], [], [], json_encode([]));
+        $this->assertEquals(JobRequestController::HTTP_STATUS_BAD_REQUEST, $client->getResponse()->getStatusCode());
+
+        //create with invalid payload
+        $client->request('POST', '/job_request', [], [], [], json_encode($this->invalidPayload));
+        $this->assertEquals(JobRequestController::HTTP_STATUS_GENERAL_SERVER_ERROR, $client->getResponse()->getStatusCode());
     }
 
     /**
