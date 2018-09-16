@@ -22,8 +22,10 @@
         "sensiolabs/security-checker": "^4.1",
         "symfony/dotenv": "*",
         "symfony/maker-bundle": "^1.7",
+        "symfony/phpunit-bridge": "*",
         "symfony/test-pack": "^1.0",
-        "symfony/web-server-bundle": "*"
+        "symfony/web-server-bundle": "*",
+        "zalas/phpunit-injector": "^1.2"
     },
     "config": {
         "preferred-install": {
