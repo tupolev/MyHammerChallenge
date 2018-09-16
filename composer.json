@@ -17,6 +17,7 @@
         "symfony/yaml": "*"
     },
     "require-dev": {
+        "ext-xdebug": "*",
         "doctrine/doctrine-fixtures-bundle": "^3.0",
         "phpunit/phpunit": "^7.3",
         "sensiolabs/security-checker": "^4.1",
