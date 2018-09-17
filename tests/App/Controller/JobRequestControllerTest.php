@@ -43,7 +43,7 @@ class JobRequestControllerTest extends WebTestCase implements ServiceContainerTe
         $client = static::createClient();
 
         //Create with valid payload
-        $client->request('POST', '/job_request', [], [], [], json_encode(self::$validPayload));
+        $client->request('POST', '/api/job_request', [], [], [], json_encode(self::$validPayload));
         $this->assertEquals(JobRequestController::HTTP_STATUS_CREATED, $client->getResponse()->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
             $client->getResponse()->getContent(),
@@ -51,17 +51,17 @@ class JobRequestControllerTest extends WebTestCase implements ServiceContainerTe
         );
 
         //create with wrong body
-        $client->request('POST', '/job_request', [], [], [], "");
+        $client->request('POST', '/api/job_request', [], [], [], "");
         $this->assertEquals(JobRequestController::HTTP_STATUS_BAD_REQUEST, $client->getResponse()->getStatusCode());
 
         //create with invalid payload
-        $client->request('POST', '/job_request', [], [], [], json_encode(self::$invalidPayload));
+        $client->request('POST', '/api/job_request', [], [], [], json_encode(self::$invalidPayload));
         $this->assertEquals(JobRequestController::HTTP_STATUS_BAD_REQUEST, $client->getResponse()->getStatusCode());
 
         //create with invalid locationId
         $modifiedPayload = self::$validPayload;
         $modifiedPayload["locationId"] = -10;
-        $client->request('POST', '/job_request', [], [], [], json_encode($modifiedPayload));
+        $client->request('POST', '/api/job_request', [], [], [], json_encode($modifiedPayload));
         $this->assertEquals(JobRequestController::HTTP_STATUS_CONFLICT, $client->getResponse()->getStatusCode());
     }
 

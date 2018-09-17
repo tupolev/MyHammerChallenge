@@ -1,0 +1,98 @@
+openapi: 3.0.0
+info:
+  title: MyHammer Challenge API
+  description: MyHammer Challenge job request API.
+  version: 0.1.0
+servers:
+- url: http://localhost:8080/api
+paths:
+  /job_request:
+    post:
+      summary: Creates a job request in the system.
+      description: Creates a job requst with a definedd payload.
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        name: JobRequest
+        description: The job request to create.
+        schema:
+          $ref: "#/definitions/JobRequest"
+      responses:
+        201:    # status code
+          description: Job request was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Response"
+        409:    # status code
+          description: A JSON object notifying a problem creating the job request
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Response"
+        400:    # status code
+          description: A JSON object notifying validation errors in the job request
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Response"
+
+definitions:
+  JobRequest:
+    type: object
+    required:
+    - userId
+    - categoryId
+    - locationId
+    - title
+    - description
+    - requestedDateTime
+    properties:
+      userId:
+        description: A valid userId on the system
+        type: number
+      categoryId:
+        description: A valid categoryId on the system
+        type: number
+      locationId:
+        description: A valid categoryId on the system
+        type: number
+      title:
+        description: The job request title
+        minlength: 5
+        maxlength: 50
+        type: string
+      description:
+        description: Detailed description of the job request
+        minlength: 100
+        type: string
+      requestedDateTime:
+        description: ISO datetime formatted date string of the job request
+        format: ISO datetime string
+        example: "2018-10-10T10:10Z"
+        type: string
+  Response:
+    type: object
+    properties:
+      status:
+        description: Overall result of the operation
+        type: string
+      message:
+        description: Detailed operation result message
+        type: string
+      fields:
+        description: A list of errors by field names
+        type: array
+        items:
+          $ref: "#/definitions/FieldMessage"
+  FieldMessage:
+    type: object
+    description: A field with errors and the message
+    properties:
+      field:
+        description: Field name
+        type: string
+      message:
+        description: Error message for that field
+        type: string

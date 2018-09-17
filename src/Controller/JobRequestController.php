@@ -11,9 +11,11 @@ use App\Validator\JobRequestPayloadValidator;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Route;
 use FOS\RestBundle\Controller\FOSRestController;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Swagger\Annotations as SWG;
 
 /**
  * @package App\Controller
@@ -51,7 +53,9 @@ class JobRequestController extends FOSRestController
     }
 
     /**
-     * @Post("/job_request")
+     * @Route("/api/job_request", methods={"POST"})
+     *
+     * Creates a job service request in the system.
      * @param Request $request
      * @return JsonResponse
      */
