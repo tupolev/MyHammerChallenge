@@ -8,10 +8,13 @@ use App\Tests\App\Context\JobRequestContext;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Input\StringInput;
+use Zalas\Injector\PHPUnit\Symfony\TestCase\SymfonyTestContainer;
+use Zalas\Injector\PHPUnit\TestCase\ServiceContainerTestCase;
 
 /** @covers \App\Controller\JobRequestController */
-class JobRequestControllerTest extends WebTestCase
+class JobRequestControllerTest extends WebTestCase implements ServiceContainerTestCase
 {
+    use SymfonyTestContainer;
     use JobRequestContext;
 
     protected static $application;
@@ -24,6 +27,17 @@ class JobRequestControllerTest extends WebTestCase
         parent::setUp();
     }
 
+    public function testConstruct()
+    {
+        $container = $this->createContainer();
+        $jobRequestService = $container->get("app.service.job_request");
+        $jobRequestFactory = $container->get("app.factory.job_request");
+        $logger = $container->get("logger");
+
+        $this->assertInstanceOf(JobRequestController::class, new JobRequestController($jobRequestService, $jobRequestFactory, $logger));
+    }
+
+    /** @covers \App\Controller\JobRequestController::postAction */
     public function testCreate()
     {
         $client = static::createClient();
@@ -37,12 +51,18 @@ class JobRequestControllerTest extends WebTestCase
         );
 
         //create with wrong body
-        $client->request('POST', '/job_request', [], [], [], json_encode([]));
+        $client->request('POST', '/job_request', [], [], [], "");
         $this->assertEquals(JobRequestController::HTTP_STATUS_BAD_REQUEST, $client->getResponse()->getStatusCode());
 
         //create with invalid payload
         $client->request('POST', '/job_request', [], [], [], json_encode(self::$invalidPayload));
-        $this->assertEquals(JobRequestController::HTTP_STATUS_GENERAL_SERVER_ERROR, $client->getResponse()->getStatusCode());
+        $this->assertEquals(JobRequestController::HTTP_STATUS_BAD_REQUEST, $client->getResponse()->getStatusCode());
+
+        //create with invalid locationId
+        $modifiedPayload = self::$validPayload;
+        $modifiedPayload["locationId"] = -10;
+        $client->request('POST', '/job_request', [], [], [], json_encode($modifiedPayload));
+        $this->assertEquals(JobRequestController::HTTP_STATUS_CONFLICT, $client->getResponse()->getStatusCode());
     }
 
     /**

@@ -34,7 +34,7 @@ class JobRequestFixtures extends Fixture
 
         /* Job locations fixtures */
         $locations = [
-            ["id" => 1, "zipcode" => "10115", "city" => "Berlin"],
+            ["id" => 1 , "zipcode" => "10115", "city" => "Berlin"],
             ["id" => 2, "zipcode" => "32457", "city" => "Porta Westfalica"],
             ["id" => 3, "zipcode" => "01623", "city" => "Lommatzsch"],
             ["id" => 4, "zipcode" => "21521", "city" => "Hamburg"],

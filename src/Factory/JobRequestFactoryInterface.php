@@ -9,9 +9,8 @@ interface JobRequestFactoryInterface
 {
     /**
      * @param string $requestBody
-     * @param array $jobRequestParseErrors
      *
      * @return JobRequestDTO|null
      */
-    public function __invoke(string $requestBody, array &$jobRequestParseErrors): ?JobRequestDTO;
+    public function buildJobRequestDTO(string $requestBody): ?JobRequestDTO;
 }

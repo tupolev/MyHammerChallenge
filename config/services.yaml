@@ -33,7 +33,6 @@ services:
         class: App\Factory\JobRequestFactory
 
     app.model.job_request:
-#        public: true
         class: App\Model\JobRequestModel
         arguments:
             - "@App\\Repository\\JobRequestRepository"

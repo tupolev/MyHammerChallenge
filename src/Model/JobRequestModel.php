@@ -48,11 +48,10 @@ class JobRequestModel implements JobRequestModelInterface
 
     /**
      * @param JobRequestDTO $jobRequestDTO
-     * @param array $jobRequestCreationErrors
      *
      * @throws JobRequestPersistException
      */
-    public function createNewJobRequest(JobRequestDTO $jobRequestDTO, array $jobRequestCreationErrors)
+    public function createNewJobRequest(JobRequestDTO $jobRequestDTO)
     {
         try {
             $jobRequestEntity = new JobRequestEntity();

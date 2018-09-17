@@ -3,7 +3,16 @@
 namespace App\Tests\Model;
 
 use App\DTO\JobRequestDTO;
+use App\Model\JobRequestModel;
 use App\Model\JobRequestModelInterface;
+use App\Repository\JobCategoryRepository;
+use App\Repository\JobCategoryRepositoryInterface;
+use App\Repository\JobLocationRepository;
+use App\Repository\JobLocationRepositoryInterface;
+use App\Repository\JobRequestRepository;
+use App\Repository\JobRequestRepositoryInterface;
+use App\Repository\JobUserRepository;
+use App\Repository\JobUserRepositoryInterface;
 use App\Tests\App\Context\JobRequestContext;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use TypeError;
@@ -15,11 +24,24 @@ class JobRequestModelTest extends KernelTestCase implements ServiceContainerTest
 {
     use SymfonyTestContainer;
     use JobRequestContext;
+
     /**
      * @var JobRequestModelInterface
      * @inject app.model.job_request
      */
     private $jobRequestModel = null;
+
+
+    public function testConstruct()
+    {
+        $container = $this->createContainer();
+        $jobRequestRepo = $container->get(JobRequestRepository::class);
+        $jobUserRepo = $container->get(JobUserRepository::class);
+        $jobCategoryRepo = $container->get(JobCategoryRepository::class);
+        $jobLocationRepo = $container->get(JobLocationRepository::class);
+
+        $this->assertInstanceOf(JobRequestModel::class, new JobRequestModel($jobRequestRepo, $jobUserRepo, $jobCategoryRepo, $jobLocationRepo));
+    }
 
     /**
      * @expectedException TypeError

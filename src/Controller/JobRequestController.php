@@ -7,6 +7,7 @@ use App\DTO\ValidationFieldDTO;
 use App\Exception\JobRequestPersistException;
 use App\Factory\JobRequestFactoryInterface;
 use App\Service\JobRequestServiceInterface;
+use App\Validator\JobRequestPayloadValidator;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Route;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -20,10 +21,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class JobRequestController extends FOSRestController
 {
-    const HTTP_STATUS_UNPROCESSABLE_ENTITY = 422;
-    const HTTP_STATUS_BAD_REQUEST = 410;
+    const HTTP_STATUS_BAD_REQUEST = 400;
     const HTTP_STATUS_CREATED = 201;
-    const HTTP_STATUS_GENERAL_SERVER_ERROR = 500;
+    const HTTP_STATUS_CONFLICT = 409;
 
     /** @var JobRequestServiceInterface */
     private $jobRequestService = null;
@@ -59,32 +59,22 @@ class JobRequestController extends FOSRestController
     {
         try {
             $requestBody = $request->getContent();
-            $jobRequestParseErrors = [];
-            $jobRequestFactory = $this->jobRequestFactory;
 
-            $jobRequestDTO = $jobRequestFactory($requestBody, $jobRequestParseErrors);
-
-            if (!$jobRequestDTO) {
-                return $this->buildInvalidRequestErrorResponse($jobRequestParseErrors);
+            $jobRequestValidateErrors = [];
+            $jobRequestIsValid = (new JobRequestPayloadValidator())->isValidRequestPayload($requestBody, $jobRequestValidateErrors);
+            if (!$jobRequestIsValid) {
+                return $this->buildInvalidRequestErrorResponse($jobRequestValidateErrors);
             }
 
-            $jobRequestCreationErrors = [];
-            $this->jobRequestService->createNewJobRequest($jobRequestDTO, $jobRequestCreationErrors);
+            $jobRequestDTO = $this->jobRequestFactory->buildJobRequestDTO($requestBody);
 
-            if (!empty($jobRequestCreationErrors)) {
-                return $this->buildValidationErrorResponse($jobRequestCreationErrors);
-            }
+            $this->jobRequestService->createNewJobRequest($jobRequestDTO);
 
             return $this->buildSuccessfulCreationResponse();
         } catch (JobRequestPersistException $ex) {
             $this->logger->error("[JobRequestController][JobRequestPersistException] {$ex->getMessage()}");
 
-            return $this->buildGeneralErrorResponse("Could not create job request. ({$ex->getMessage()})");
-        } catch (\Exception $ex) {
-            $exceptionClass = get_class($ex);
-            $this->logger->error("[JobRequestController][$exceptionClass] {$ex->getMessage()}\n{$ex->getTraceAsString()}");
-
-            return $this->buildGeneralErrorResponse("Unexpected server error ({$ex->getMessage()})");
+            return $this->buildPersistErrorResponse("Could not create job request. ({$ex->getMessage()})");
         }
     }
 
@@ -112,24 +102,13 @@ class JobRequestController extends FOSRestController
         return $this->json($responseDTO, self::HTTP_STATUS_BAD_REQUEST);
     }
 
-    private function buildValidationErrorResponse(array $jobRequestCreationErrors)
-    {
-        $responseDTO = new ResponseDTO(ResponseDTO::STATUS_ERROR, "Job request invalid. One or more fields are invalid.");
-
-        foreach ($jobRequestCreationErrors as $field => $error) {
-            $responseDTO->addField(new ValidationFieldDTO($field, $error));
-        }
-
-        return $this->json($responseDTO, self::HTTP_STATUS_UNPROCESSABLE_ENTITY);
-    }
-
     /**
      * @param string $errorMessage
      *
      * @return JsonResponse
      */
-    private function buildGeneralErrorResponse(string $errorMessage): JsonResponse
+    private function buildPersistErrorResponse(string $errorMessage): JsonResponse
     {
-        return $this->json(new ResponseDTO(ResponseDTO::STATUS_ERROR, $errorMessage), self::HTTP_STATUS_GENERAL_SERVER_ERROR);
+        return $this->json(new ResponseDTO(ResponseDTO::STATUS_ERROR, $errorMessage), self::HTTP_STATUS_CONFLICT);
     }
 }

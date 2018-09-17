@@ -3,7 +3,7 @@
 namespace App\DTO;
 
 
-class ValidationFieldDTO
+class ValidationFieldDTO implements \JsonSerializable
 {
     /** @var string */
     private $name = "";
@@ -51,5 +51,20 @@ class ValidationFieldDTO
     public function setMessage(string $message): void
     {
         $this->message = $message;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        return [
+            "name" => $this->name,
+            "message" => $this->message,
+        ];
     }
 }

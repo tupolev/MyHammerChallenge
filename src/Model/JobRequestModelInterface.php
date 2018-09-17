@@ -10,8 +10,7 @@ interface JobRequestModelInterface
 {
     /**
      * @param JobRequestDTO $jobRequestDTO
-     * @param array $jobRequestCreationErrors
      * @throws JobRequestPersistException
      */
-    public function createNewJobRequest(JobRequestDTO $jobRequestDTO, array $jobRequestCreationErrors);
+    public function createNewJobRequest(JobRequestDTO $jobRequestDTO);
 }

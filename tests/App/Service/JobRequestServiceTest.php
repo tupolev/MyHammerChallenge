@@ -3,6 +3,7 @@
 namespace App\Tests\Service;
 
 use App\DTO\JobRequestDTO;
+use App\Service\JobRequestService;
 use App\Service\JobRequestServiceInterface;
 use App\Tests\App\Context\JobRequestContext;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -21,6 +22,13 @@ class JobRequestServiceTest extends KernelTestCase implements ServiceContainerTe
      * @inject app.service.job_request
      */
     private $jobRequestService = null;
+
+    public function testConstruct()
+    {
+        $container = $this->createContainer();
+        $jobRequestModel = $container->get("app.model.job_request");
+        $this->assertInstanceOf(JobRequestService::class, new JobRequestService($jobRequestModel));
+    }
 
     /**
      * @expectedException TypeError
