@@ -1,4 +1,4 @@
-# MyHammer challenge
+# Code test
 ### Job Request API
 
 ##### How to run?
